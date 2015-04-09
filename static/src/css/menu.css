@@ -1,0 +1,45 @@
+.menu {
+	width: 100%;
+	height: 100%;
+	background: #FFBF00;
+	position: relative;
+}
+
+	.menu__bottom {
+		vertical-align: bottom;
+		padding-bottom: 10px;
+	}
+
+	.menu__item {
+		padding: 10px 10px;
+	}
+
+	.menu__bottom .menu__item {
+		display: inline-block;
+		padding-right: 5px;
+		padding-bottom: 0;
+	}
+
+		.menu__bottom .menu__item:first-child {
+			padding-left: 10px;
+		}
+
+.menu-toggle {
+	position: absolute;
+	left: 180px;
+	top: 15px;
+	display: block;
+	cursor: pointer;
+	padding: 10px;
+	background: #FFBF00;
+	border-bottom-right-radius: 5px; 
+	border-top-right-radius: 5px; 
+	z-index: 10;
+	font-size: 12px;
+  	line-height: 12px;	
+}
+
+	.app_menu-closed .menu-toggle {
+	  left: 0;
+	  top: 60px;
+	}

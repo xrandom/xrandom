@@ -1,0 +1,10 @@
+.hint {
+	font-size: 14px;
+	color: #666;
+	cursor: pointer;
+	padding: 9px 8px;
+}
+
+	.hint_right {
+		text-align: right;
+	}

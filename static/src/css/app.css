@@ -1,0 +1,22 @@
+.app {
+	height: 100%;	
+	width: 100%;
+}
+
+	.app__menu {
+		width: 220px;
+		height: 100%;
+		position: relative;
+	}
+
+	.app_menu-closed .app__menu {
+		display: none;	
+	}
+
+	.app__videos {
+		position: relative;
+	}
+
+		.app_menu-closed .app__videos {
+			width: 100%;
+		}

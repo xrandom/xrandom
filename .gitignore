@@ -1,0 +1,5 @@
+node_modules/
+log.txt
+config/config.js
+static/js/app.min.js
+static/css/style.min.css

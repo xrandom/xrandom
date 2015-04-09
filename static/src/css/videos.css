@@ -1,0 +1,43 @@
+.videos {
+	overflow: hidden;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+.player-container {
+    display: inline-block;
+    position: relative;
+}
+
+.preparing-iframe {
+    left: -9990px;
+    top: -9990px;
+    position: absolute;
+}
+
+.player-controls {
+
+}
+
+	.player-controls__many {
+		list-style-type: decimal;
+		padding-left: 20px;
+	}
+	
+	.player-button_full {
+		width: 100%;
+		position: relative;
+		top: -20px;
+		border: 1px solid black;
+	}
+
+.player-button__close,
+.player-button__close:hover {
+	border: none;
+	background: transparent;
+	float: right;
+}

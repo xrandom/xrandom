@@ -1,0 +1,32 @@
+h1, h2, h3, h4 {
+	font-size: 36px;
+	color: black;
+}
+
+	h1:hover .header-jump {
+		display: inline-block;
+		-webkit-animation: jumping ease-in-out 0.4s;
+		-webkit-animation-iteration-count: 2;
+		-webkit-transform-origin: 50% 50%;
+		-moz-animation: jumping ease-in-out 0.4s;
+		-moz-animation-iteration-count: 2;
+		-moz-transform-origin: 50% 50%;
+		-o-animation: jumping ease-in-out 0.4s;
+		-o-animation-iteration-count: 2;
+		-o-transform-origin: 50% 50%;
+		-ms-animation: jumping ease-in-out 0.4s;
+		-ms-animation-iteration-count: 2;
+		-ms-transform-origin: 50% 50%;
+		animation: jumping ease-in-out 0.4s;
+		animation-iteration-count: 2;
+		transform-origin: 50% 50%;	  
+	}
+
+h2 {
+	font-size: 32px;
+	margin-bottom: 15px;
+}
+
+h3 {
+	font-size: 20px;
+}

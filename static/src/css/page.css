@@ -1,0 +1,39 @@
+.page {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #FFBF00;
+	margin-left: 5px;
+	padding: 15px;
+}
+
+.page-link {
+	color: #CC5500;
+}
+
+	.page-link_hint {
+		margin-left: 20px;
+		display: inline-block;
+		margin-top: 5px;
+		cursor: pointer;
+	}
+
+.page-article {
+	margin-bottom: 20px;
+}
+
+.list {
+	list-style-type: decimal;
+	margin-left: 20px;
+}
+	.list_bullet {
+		list-style-type: circle;
+	}
+
+.list-item {
+	margin-bottom: 10px;
+	line-height: 18px;
+	max-width: 450px;
+}
