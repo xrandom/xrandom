@@ -1,0 +1,82 @@
+containers:
+  base:
+    setup:
+      - !Ubuntu trusty
+      - !UbuntuUniverse
+  app:
+    setup:
+      - !Container base
+      - !Install [nodejs]
+      - !NpmInstall [grunt-cli]
+      - !Depends package.json
+      - !Depends Gruntfile.js
+      - !Sh |
+          set -ex
+          cp ./config/config.ex.js ./config/config.js
+          npm install
+          grunt
+  nginx:
+    setup:
+      - !Container base
+      - !Install [nginx]
+      - !Depends runtime/nginx.conf
+      - !Sh |
+          rm /etc/nginx/sites-enabled/default
+          cp runtime/nginx.conf /etc/nginx/conf.d/site.conf
+    volumes:
+      /var: !Tmpfs
+       mode: 0o766
+       subdirs:
+        lib:
+        lib/nginx:
+        log: # default mode is 0o766
+        log/nginx: { mode: 0o1777 }
+  elastic:
+    setup:
+      - !Container base
+      - !BuildDeps [ca-certificates, wget]
+      - !UbuntuRepo
+        url: http://packages.elastic.co/elasticsearch/1.7/debian
+        suite: stable
+        components: [main]
+      - !Sh |
+         wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+      - !Install [elasticsearch, python3-lxml, default-jre, default-jdk]
+      - !Sh |
+          mkdir /data
+          mkdir /usr/share/elasticsearch/config
+          cp runtime/elasticsearch.yml /usr/share/elasticsearch/config
+    volumes:
+      /data: !BindRW /work/runtime/data
+
+commands:
+  elasticsearchserver: !Command
+    container: elastic
+    run: "/usr/share/elasticsearch/bin/elasticsearch"
+  node_app: !Command
+    container: app
+    run: "node app.js force-elastic"
+  app: !Supervise
+    mode: stop-on-failure
+    children:
+      nginx: !Command
+        container: nginx
+        run: nginx -g "daemon off;"
+      node_app: !Command
+        container: app
+        run: "node app.js force-elastic"
+      elasticsearchserver: !Command
+        container: elastic
+        run: "/usr/share/elasticsearch/bin/elasticsearch"
+  update_elastic: !Supervise
+      mode: stop-on-failure
+      children:
+        elasticsearchserver: !Command
+          container: elastic
+          run: "/usr/share/elasticsearch/bin/elasticsearch"
+        updateelastic: !Command
+            container: app
+            run: "node tools/update_elastic.js"
+  updateelastic: !Command
+    container: app
+    run: "node tools/update_elastic.js"

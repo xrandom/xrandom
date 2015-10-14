@@ -2,54 +2,25 @@ var fs = require('fs');
 var url = require('url');
 var http = require('http');
 var extend = require('extend');
-var elasticsearch = require('elasticsearch');
 
-var config = require('./config/config.ex.js');
-var localConfig = require('./config/config');
+var cfg = require('./config/cfg');
 
-extend(true, config, localConfig);
+var utils = require('./lib/utils');
+
+var es = require('././config/es');
+
+var errHandler = function() {
+    console.log('Error:', arguments);
+    process.exit(1);
+};
 
 // Video ids if elasticsearch is down
 var ids = fs.readFileSync('data').toString().split('\n');
 
-function shuffle(array) {
-    var counter = array.length, temp, index;
-
-    while (counter > 0) {
-        index = Math.floor(Math.random() * counter);
-
-        counter--;
-
-        temp = array[counter];
-        array[counter] = array[index];
-        array[index] = temp;
-    }
-
-    return array;
-};
-
-shuffle(ids);
+utils.shuffleArray(ids);
 var length = ids.length;
 
 var current = 0;
-
-var elastic = new elasticsearch.Client({
-  host: config.elastic.host,
-  log: 'trace'
-});
-
-var is_elastic_enabled = false;
-
-elastic.ping({
-  requestTimeout: 1000,
-}, function (error) {
-  if (error) {
-    console.log('Elasticsearch cluster is down!');
-  } else {
-    console.log('Elasticsearch enabled!');
-    is_elastic_enabled = true;
-  }
-});
 
 var writeData = function(data, response, is_elastic) {
     response.writeHead(200, {
@@ -67,7 +38,7 @@ var regex = /[^a-z\s\-\d]/gi;
 
 var defaultResult = function(response, query, now) {
     var data = [];
-    for (var i = 0; i < config.app.resultIdCount; i++) {
+    for (var i = 0; i < cfg.app.resultIdCount; i++) {
         data.push(ids[current]);
         current = (current + 1) % length;
     }
@@ -84,14 +55,8 @@ var server = http.createServer(function(request, response) {
     var tranny = query.indexOf('trans') === -1 ? ' -trans' : '';
     var shemale = query.indexOf('shemale') === -1 ? ' -shemale' : '';
 
-    if (gay || tranny || shemale) {
-        gay = '';
-        tranny = '';
-        shemale = '';
-    }
-
     if (is_elastic_enabled) {
-        elastic.search({
+        es.search({
           index: 'videos',
           size: query ? 25 : 500,
           body: {
@@ -117,10 +82,10 @@ var server = http.createServer(function(request, response) {
                 return hit['_id'];
             });
 
-            shuffle(data);
+            utils.shuffleArray(data);
 
             var newData = [];
-            for (var i = 0; i < Math.min(data.length, config.app.resultIdCount); ++i) {
+            for (var i = 0; i < Math.min(data.length, cfg.app.resultIdCount); ++i) {
                 newData.push(data[i]);
             }
 
@@ -134,6 +99,22 @@ var server = http.createServer(function(request, response) {
         defaultResult(response, query, now);
     }
 });
+var waitForElastic = process.argv[2] == 'force-elastic';
 
-console.log('Start listening %d port', config.env.port);
-server.listen(config.env.port); 
+var is_elastic_enabled = false;
+function runServer() {
+    console.log('Start node app listening on %d port', cfg.env.port);
+    server.listen(cfg.env.port);
+}
+
+if(waitForElastic) {
+    utils.waitForElastic()
+        .then(function () {
+            console.log('Elasticsearch enabled!');
+            is_elastic_enabled = true;
+            runServer();
+        }, errHandler).catch(errHandler);
+} else {
+    console.log('Using static database.');
+    runServer();
+}
