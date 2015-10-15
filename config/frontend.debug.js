@@ -1,3 +1,3 @@
 var Config = {
-    backend: 'http://localhost:3032'
+    backend: '/search/'
 };

@@ -1,5 +1,11 @@
+# Backend stuff
+.idea/
+.vagga/
+runtime/data/*
 node_modules/
-log.txt
 config/config.js
+data.xml
+log.txt
+# Frontend stuff
 static/js/app.min.js
 static/css/style.min.css

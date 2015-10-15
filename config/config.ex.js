@@ -1,6 +1,6 @@
 module.exports = {
     env: {
-        port: 5678, 
+        port: 5678
     },
 
     app: {
@@ -8,6 +8,7 @@ module.exports = {
     },
 
     elastic: {
-        host: 'localhost:9200'
+        host: '127.0.0.1:9200',
+        log: 'error'
     }
 };
