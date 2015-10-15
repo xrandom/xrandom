@@ -1,4 +1,4 @@
-xRandom
+xRandom - Random Porn Videos
 =======
 
 Dependencies:
@@ -6,7 +6,7 @@ Dependencies:
 - nginx
 - elasticsearch
 
-- OR - 
+or use
 - vagga
 
 ### How to run?
