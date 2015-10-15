@@ -1,13 +1,12 @@
 var fs = require('fs');
 var url = require('url');
 var http = require('http');
-var extend = require('extend');
 
 var cfg = require('./config/cfg');
 
 var utils = require('./lib/utils');
 
-var es = require('././config/es');
+var es = require('./lib/es');
 
 var errHandler = function() {
     console.log('Error:', arguments);

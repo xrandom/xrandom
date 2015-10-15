@@ -4,7 +4,7 @@ var request = require('request');
 var fs = require('fs');
 var path = require('path');
 
-var es = require('../config/es');
+var es = require('../lib/es');
 
 var utils = require('../lib/utils');
 
