@@ -32,6 +32,9 @@ var writeData = function(data, response, is_elastic) {
     }));    
 };
 
+// Flag for elasticsearch
+var isElasticEnabled = false;
+
 // filter queries
 var regex = /[^a-z\s\-\d]/gi;
 
@@ -42,7 +45,7 @@ var defaultResult = function(response, query, now) {
         current = (current + 1) % length;
     }
 
-    writeData(data, response, !query && is_elastic_enabled);
+    writeData(data, response, !query && isElasticEnabled);
     console.log('[%s] Takes: ', now.toISOString(), new Date() - now);
 };
 
@@ -54,7 +57,7 @@ var server = http.createServer(function(request, response) {
     var tranny = query.indexOf('trans') === -1 ? ' -trans' : '';
     var shemale = query.indexOf('shemale') === -1 ? ' -shemale' : '';
 
-    if (is_elastic_enabled) {
+    if (isElasticEnabled) {
         es.search({
           index: 'videos',
           size: query ? 25 : 500,
@@ -100,7 +103,6 @@ var server = http.createServer(function(request, response) {
 });
 var waitForElastic = process.argv[2] == 'force-elastic';
 
-var is_elastic_enabled = false;
 function runServer() {
     console.log('Start node app listening on %d port', cfg.env.port);
     server.listen(cfg.env.port);
@@ -110,7 +112,7 @@ if(waitForElastic) {
     utils.waitForElastic()
         .then(function () {
             console.log('Elasticsearch enabled!');
-            is_elastic_enabled = true;
+            isElasticEnabled = true;
             runServer();
         }, errHandler).catch(errHandler);
 } else {
