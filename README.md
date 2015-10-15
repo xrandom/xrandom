@@ -29,7 +29,7 @@ grunt
 node app.js
 ```
 
-Then install(just google how if you don't know how) and set up nginx:
+Then install (just google how if you don't know how) and set up nginx:
 A file called `/etc/nginx/conf.d/xrandom.conf`:
 ```
 server {
